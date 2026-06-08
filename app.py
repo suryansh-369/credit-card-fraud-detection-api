@@ -5,7 +5,7 @@ import joblib
 
 app = FastAPI()
 model = joblib.load('random_forest_pipeline.pkl')
-
+THRESHOLD = 0.4
 class InputData(BaseModel):
     Time: float
     V1: float
@@ -47,12 +47,9 @@ def predict(transaction: InputData):
 
     data = pd.DataFrame([transaction.model_dump()])
 
-    print(data)
-    print(model.predict_proba(data))
-
     probability = model.predict_proba(data)[0][1]
 
-    prediction = int(probability >= 0.4)
+    prediction = int(probability >= THRESHOLD)
 
     return {
         "fraud_probability": round(float(probability), 4)  ,
