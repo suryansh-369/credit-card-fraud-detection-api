@@ -1,0 +1,132 @@
+
+without class balance 
+Precision 0.82
+recall 0.64
+FP 13
+FN 35
+
+with class balance 
+precison 0.06 
+recsll 0.92
+FP 1386
+FN 8
+
+without classbalance 
+t= 0.2
+FP 26
+FN 25 
+.
+.
+.
+t=0.9
+FP 11
+FN 47 
+
+with class balance 
+t=0.2
+FP 5532
+FN 6
+.
+.
+.
+t=0.9
+FP 268
+FN 11
+
+    rf 
+    t=0.9 
+    FP 1
+    FN 49
+
+    rft=0.8
+    FP 2 
+    FN 35
+
+    rf 
+    t=0.6
+    FP 3
+    FN 21
+
+    rf
+    t=0.5
+    FP 6 
+    FN 18
+
+    rf 
+    t=0.4
+    FP 9
+    FN 13
+
+    rf
+    t=0.3
+    FP 15
+    FN 13
+
+    rf 
+    t=0.2
+    FP 26 
+    FN 12
+
+    rf_s
+    t=0.3
+    FP 48
+    FN 11
+
+    rf_s
+    t=0.6
+    FP 12 
+    FN 17
+  
+    rf_s
+    t=0.7
+    FP 9
+    FN 19
+
+    rf_s
+    t=0.8
+    FP 7
+    FN 21
+
+    rf_hyper_tuning
+
+    checkinh max_depath
+    random_state=42,
+            n_estimators=20,
+            min_samples_split=10,
+            min_samples_leaf=10,
+            max_features=0.5
+             max_depth=5,FP 14 FN 19 1.30m
+            max_depth=5,FP 15  FN 19 3.20m
+             max_depth=5,FP 16 FN 18 4.16m
+
+    checking for min_sample_leaf
+    random_state=42,
+                n_estimators=20,
+                max_depth=5,
+                min_samples_split=10,
+                max_features=0.5
+                 min_samples_leaf=1, FP 14 FN 20 53s
+                 min_samples_leaf=3, FP 15  FN 21 47s
+                 min_samples_leaf=5, FP 14 FN 19 1.21m
+                 min_samples_leaf=10, FP 18 FN 20 1.2m   
+
+rf_100
+t=0.4
+FP 7 
+FN 14  2.14m
+
+rf_100
+t=0.5
+FP 5
+FN 17
+
+rf_100
+t=0.3
+FP 12
+FN 14
+
+rf_100
+t=0.6
+FP 4
+FN 21
+
