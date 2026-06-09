@@ -166,3 +166,16 @@ http://127.0.0.1:8000/docs
 Suryansh
 
 Machine Learning & AI Engineering Project
+
+---
+
+## Frontend (Local)
+
+A simple frontend is included at the project root to interact with the prediction API.
+
+- Open `index.html` in a browser (served from the project root or via a simple static server).
+- Single JSON predictions: POST JSON to `/predict` (or change endpoint using the UI selector).
+- CSV batch predictions: POST a form upload (field `file`) to `/predict_csv` (or change endpoint selector).
+
+If your API is running on a different host or port, open the browser devtools and change the endpoint selectors or host the frontend behind the same origin (or enable CORS in the API).
+

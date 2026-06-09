@@ -1,7 +1,10 @@
 import pandas as pd
 from pydantic import BaseModel
-from fastapi import FastAPI
+from fastapi import FastAPI 
 import joblib
+from fastapi import UploadFile, File 
+from fastapi.responses import FileResponse
+import uuid
 
 app = FastAPI()
 model = joblib.load('random_forest_pipeline.pkl')
@@ -56,3 +59,56 @@ def predict(transaction: InputData):
         "prediction": prediction,
         "result": "Fraud" if prediction else "Legitimate"
     }
+
+@app.post("/batch_predict")
+def batch_predict(file: UploadFile = File(...)):
+    data = pd.read_csv(file.file)
+    
+    if "Class" in data.columns:
+        data = data.drop("Class", axis=1)
+    
+    expexted_columns = ['Time', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8', 'V9', 'V10', 'V11', 'V12', 'V13', 'V14', 'V15', 'V16', 'V17', 'V18', 'V19', 'V20', 'V21', 'V22', 'V23', 'V24', 'V25', 'V26', 'V27', 'V28', 'Amount']
+    
+    missing_cols = set(expexted_columns) - set(data.columns)
+    
+    if missing_cols:
+        return {"error": "Missing columns",
+                "Missing Column": missing_cols}
+
+    invalid_columns = []
+    for col in expexted_columns:
+        try:
+            data[col] = pd.to_numeric(data[col])
+        except:
+            invalid_columns.append(col)
+    if invalid_columns:
+        return {
+            "error": "Invalid numeric columns",
+            "invalid_columns": invalid_columns
+            }
+    
+    
+    probabilities = model.predict_proba(data)[:, 1]
+    predictions = (probabilities >= THRESHOLD)
+
+    data['fraud_probability'] = probabilities.round(4)
+    data['prediction'] = predictions.astype(int)
+
+    
+    #fraud_predictions = (data["prediction"] == 1).sum()
+    #legitimate_predictions = (data["prediction"] == 0).sum()
+    
+    
+
+    data["prediction_label"] = data["prediction"].map({0: "Legitimate",1: "Fraud"})    
+    
+    filename = f"predictions_{uuid.uuid4()}.csv"
+    data.to_csv(filename, index=False)
+    
+    return FileResponse(
+        filename,
+        media_type="text/csv",
+        filename="predictions.csv"
+    )
+    
+  

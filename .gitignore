@@ -3,3 +3,4 @@ __pycache__/
 venv/
 .env
 data1.csv
+predictions_*.csv
