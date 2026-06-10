@@ -1,181 +1,252 @@
-# Credit Card Fraud Detection API
+#  Credit Card Fraud Detection System
 
-## Project Overview
+An end-to-end Machine Learning application that detects fraudulent credit card transactions in real time using a Random Forest classifier.
 
-This project builds and deploys a machine learning system for detecting fraudulent credit card transactions using the Credit Card Fraud Detection dataset.
+The project covers the complete ML lifecycle: data preprocessing, model training, threshold tuning, API development, frontend integration, containerization, and cloud deployment.
 
-The project covers the complete machine learning workflow:
+---
 
-* Exploratory Data Analysis (EDA)
-* Class imbalance analysis
-* Model training and evaluation
-* Threshold tuning
-* Model serialization
-* FastAPI deployment
-* REST API inference
+## 🌐 Live Demo
+
+**Frontend Application**
+[Add Your Streamlit URL Here]
+
+**API Documentation**
+https://credit-card-fraud-detection-api-1-yba7.onrender.com/docs
+
+**GitHub Repository**
+https://github.com/suryansh-369/credit-card-fraud-detection-api
+
+---
+
+## Business Problem
+
+Credit card fraud causes billions of dollars in losses every year. Fraudulent transactions are extremely rare compared to legitimate transactions, making fraud detection a highly imbalanced classification problem.
+
+The goal of this project is to identify fraudulent transactions while minimizing false alarms that could impact genuine customers.
+
+---
+
+## Solution Architecture
+
+```text
+User
+  ↓
+Streamlit Frontend
+  ↓
+FastAPI Backend
+  ↓
+Random Forest Model
+  ↓
+Fraud Prediction
+```
+
+---
+
+## Features
+
+* Real-time fraud prediction
+* Batch fraud detection via CSV upload
+* Fraud probability scoring
+* Downloadable prediction results
+* REST API built with FastAPI
+* Interactive frontend built with Streamlit
+* Dockerized application
+* Cloud deployment on Render
+* Production-ready model serving
 
 ---
 
 ## Dataset
 
-Credit Card Fraud Detection Dataset
+**Credit Card Fraud Detection Dataset**
 
-Dataset Characteristics:
+* 284,807 transactions
+* 492 fraudulent transactions
+* Fraud rate: 0.17%
+* Highly imbalanced classification problem
 
-* Total Transactions: 284,807
-* Fraud Transactions: 492
-* Fraud Rate: 0.17%
-* Features:
+Features include:
 
-  * Time
-  * Amount
-  * V1–V28 (PCA-transformed features)
-
-The dataset is highly imbalanced, making accuracy an unreliable metric for evaluation.
-
-The original Credit Card Fraud Detection dataset is not included in this repository due to its size (~144 MB).
-
-Users can download the dataset separately and place it in the project directory before running the training script.
+* Time
+* Amount
+* V1–V28 (PCA-transformed variables)
 
 ---
 
-## Models Evaluated
+## Model Development
 
-The following models were tested:
+Models evaluated:
 
-1. Logistic Regression
-2. Logistic Regression with Class Weights
-3. SMOTE-based Models
-4. Random Forest
-5. XGBoost
+* Logistic Regression
+* Weighted Logistic Regression
+* SMOTE-based Models
+* Random Forest
+* XGBoost
 
 After comparing precision, recall, false positives, and false negatives, Random Forest was selected as the final deployment model.
 
+### Final Model
+
+```python
+RandomForestClassifier(
+    n_estimators=20,
+    random_state=42,
+    n_jobs=-1
+)
+```
+
+Threshold tuned to:
+
+```python
+0.4
+```
+
+to balance fraud detection and false alarms.
+
 ---
 
-## Final Model
-
-Model:
-
-RandomForestClassifier
-
-Configuration:
-
-* n_estimators = 20
-* random_state = 42
-* n_jobs = -1
-
-Operational Threshold:
-
-* 0.4
-
----
-
-## Test Results
+## Performance
 
 Confusion Matrix:
 
+```text
 [[56855, 9],
-[13, 85]]
+ [13, 85]]
+```
 
-Performance Summary:
+Results:
 
+* Legitimate Transactions Correctly Identified: 56,855
+* Fraudulent Transactions Detected: 85
 * False Positives: 9
 * False Negatives: 13
-* Frauds Detected: 85
-* Legitimate Transactions Correctly Identified: 56,855
-
-The threshold was tuned to balance fraud detection performance while minimizing false alarms.
 
 ---
 
 ## API Endpoints
 
-### Home Endpoint
+### Health Check
 
+```http
 GET /
+```
 
-Response:
+### Single Prediction
 
-{
-"message": "Fraud Detection API is working"
-}
-
-### Prediction Endpoint
-
+```http
 POST /predict
+```
 
-Input:
+Returns:
 
+```json
 {
-"Time": 406,
-"V1": -2.312227,
-"...": "...",
-"Amount": 0
+  "fraud_probability": 0.75,
+  "prediction": 1,
+  "result": "Fraud"
 }
+```
 
-Output:
+### Batch Prediction
 
-{
-"fraud_probability": 0.75,
-"prediction": 1,
-"result": "Fraud"
-}
+```http
+POST /batch_predict
+```
+
+Upload a CSV file and receive a downloadable prediction file containing:
+
+* fraud_probability
+* prediction
+* prediction_label
 
 ---
 
-## Running Locally
+## Tech Stack
 
-Install dependencies:
-
-pip install -r requirements.txt
-
-Run API:
-
-python -m uvicorn app:app --reload
-
-Open Swagger UI:
-
-http://127.0.0.1:8000/docs
-
----
-
-## Technologies Used
+### Machine Learning
 
 * Python
 * Pandas
+* NumPy
 * Scikit-learn
+
+### Backend
+
 * FastAPI
-* Joblib
 * Uvicorn
 
----
+### Frontend
 
-## Future Improvements
+* Streamlit
 
-* Docker containerization
-* CI/CD pipeline
-* Model monitoring
-* Cloud deployment
-* Automated testing
+### Deployment
 
----
+* Docker
+* Render
 
-## Author
+### Version Control
 
-Suryansh
-
-Machine Learning & AI Engineering Project
+* Git
+* GitHub
 
 ---
 
-## Frontend (Local)
+## 📂 Project Structure
 
-A simple frontend is included at the project root to interact with the prediction API.
+```text
+├── app.py
+├── frontend.py
+├── train_model.py
+├── requirements.txt
+├── Dockerfile
+├── random_forest_pipeline.pkl
+├── README.md
+└── notebook.ipynb
+```
 
-- Open `index.html` in a browser (served from the project root or via a simple static server).
-- Single JSON predictions: POST JSON to `/predict` (or change endpoint using the UI selector).
-- CSV batch predictions: POST a form upload (field `file`) to `/predict_csv` (or change endpoint selector).
+---
 
-If your API is running on a different host or port, open the browser devtools and change the endpoint selectors or host the frontend behind the same origin (or enable CORS in the API).
+## 🏃 Running Locally
 
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Start API:
+
+```bash
+python -m uvicorn app:app --reload
+```
+
+Start Frontend:
+
+```bash
+python -m streamlit run frontend.py
+```
+
+---
+
+## 🔮 Future Improvements
+
+* Automated retraining pipeline
+* Model monitoring and drift detection
+* CI/CD integration
+* Cloud-native deployment on AWS
+* Experiment tracking with MLflow
+
+---
+
+## 👨‍💻 Author
+
+**Suryansh**
+
+Machine Learning | MLOps | AI Engineering
+
+---
+
+## ❤️ Acknowledgements
+
+Built using open-source technologies and the support of the Python, Scikit-learn, FastAPI, Streamlit, Docker, and ChatGPT communities.
