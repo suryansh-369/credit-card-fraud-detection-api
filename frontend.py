@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 
 # Change this to your Render URL later
-API_URL = "http://127.0.0.1:8000/batch_predict"
+API_URL = "https://credit-card-fraud-detection-api-1-yba7.onrender.com/batch_predict"
 
 st.set_page_config(
     page_title="Credit Card Fraud Detection",
